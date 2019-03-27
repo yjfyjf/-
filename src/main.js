@@ -11,6 +11,8 @@ import './assets/statics/site/css/style.css'
 import index from './components/index.vue'
 // 购物车
 import cart from './components/cart.vue'
+// 详情页
+import detail from './components/detail.vue'
 
 // 导入路由
 import VueRouter from 'vue-router'
@@ -26,9 +28,14 @@ let routes = [
   {
     path:'/index',
     component:index
-  },{
+  },
+  {
     path:'/cart',
     component:cart
+  },
+  {
+    path:'/detail/:id',
+    component:detail
   }
 ]
 
