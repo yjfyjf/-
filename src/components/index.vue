@@ -166,50 +166,21 @@
                                 </div>
                                 <div class="txt-box">
                                     <a href="/goods/show-98.html">{{item.title}}</a>
-                                    <span>{{item.add_time}}</span>
+                                    <span>{{item.add_time | fotmeaTime}}</span>
                                 </div>
                             </li>
-                            <!-- <li>
-                                <div class="img-box">
-                                    <label>2</label>
-                                    <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200314272543.jpg">
-                                </div>
-                                <div class="txt-box">
-                                    <a href="/goods/show-98.html">奔腾（BNTN） 380功放+纽约至尊 套装家庭影院</a>
-                                    <span>2015-04-20</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="img-box">
-                                    <label>3</label>
-                                    <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200318534459.jpg">
-                                </div>
-                                <div class="txt-box">
-                                    <a href="/goods/show-98.html">飞利浦（PHILIPS）DVP3690 全高清DVD影碟机播放器</a>
-                                    <span>2015-04-20</span>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="img-box">
-                                    <label>4</label>
-                                    <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200258403759.jpg">
-                                </div>
-                                <div class="txt-box">
-                                    <a href="/goods/show-98.html">三星（SAMSUNG）UA40HU5920JXXZ 40英寸4K超高清</a>
-                                    <span>2015-04-20</span>
-                                </div>
-                            </li> -->
+           
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="section">
+        <div class="section" v-for="item in goodslist">
             <div class="main-tit">
-                <h2>手机数码</h2>
+                <h2>{{item.catetitle}}</h2>
                 <p>
-                    <a href="/goods/43.html">手机通讯</a>
-                    <a href="/goods/43.html">摄影摄像</a>
+                    <a href="/goods/43.html" v-for="it in item.level2catelist">{{it.subcatetitle}}</a>
+                    <!-- <a href="/goods/43.html">摄影摄像</a> -->
                     <a href="/goods/40.html">更多
                         <i>+</i>
                     </a>
@@ -218,25 +189,25 @@
             <div class="wrapper clearfix">
                 <div class="wrap-box">
                     <ul class="img-list">
-                        <li>
+                        <li v-for="it in item.datas">
                             <a href="#/site/goodsinfo/87" class="">
                                 <div class="img-box">
-                                    <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200046589514.jpg">
+                                    <img :src="it.img_url">
                                 </div>
                                 <div class="info">
-                                    <h3>华为（HUAWEI）荣耀6Plus 16G双4G版</h3>
+                                    <h3>{{it.artTitle}}</h3>
                                     <p class="price">
-                                        <b>2195</b>元</p>
+                                        <b>{{it.sell_price}}</b>元</p>
                                     <p>
-                                        <strong>库存 60</strong>
+                                        <strong>库存 {{it.stock_quantity}}</strong>
                                         <span>市场价：
-                                            <s>2499</s>
+                                            <s>{{it.market_price}}</s>
                                         </span>
                                     </p>
                                 </div>
                             </a>
                         </li>
-                        <li>
+                        <!-- <li>
                             <a href="#/site/goodsinfo/88" class="">
                                 <div class="img-box">
                                     <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200059017695.jpg">
@@ -307,12 +278,12 @@
                                     </p>
                                 </div>
                             </a>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="section">
+        <!-- <div class="section">
             <div class="main-tit">
                 <h2>电脑办公</h2>
                 <p>
@@ -582,7 +553,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
 
 </template>
@@ -590,6 +561,8 @@
 <script>
 // 导入axios
 import axios from "axios"
+// 导入 moment
+import moment from "moment"
 
 export default {
     name:"index",
@@ -600,7 +573,17 @@ export default {
         // 轮播图数据
         sliderlist:[],
         // 热卖数据
-        toplist:[]
+        toplist:[],
+        // 商品数据
+        goodslist:[]
+
+
+
+        }
+    },
+    filters:{
+        fotmeaTime(){
+            return  moment().format('YYYY-MM-DD')
         }
     },
     // 在页面打开之后发请求渲染的钩子
@@ -611,6 +594,10 @@ export default {
             this.catelist = res.data.message.catelist
             this.sliderlist = res.data.message.sliderlist
             this.toplist = res.data.message.toplist
+        })
+        axios.get('http://111.230.232.110:8899/site/goods/getgoodsgroup').then(res=>{
+            console.log(res);
+            this.goodslist = res.data.message
         })
     },
 }
