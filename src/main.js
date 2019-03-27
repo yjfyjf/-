@@ -7,7 +7,10 @@ import './assets/statics/site/css/style.css'
 
 // Vue.config.productionTip = false
 // 引入组件
+// 首页
 import index from './components/index.vue'
+// 购物车
+import cart from './components/cart.vue'
 
 // 导入路由
 import VueRouter from 'vue-router'
@@ -23,6 +26,9 @@ let routes = [
   {
     path:'/index',
     component:index
+  },{
+    path:'/cart',
+    component:cart
   }
 ]
 
