@@ -159,17 +159,17 @@
                     <!--/幻灯片-->
                     <div class="left-220">
                         <ul class="side-img-list">
-                            <li>
+                            <li v-for="(item,index) in toplist">
                                 <div class="img-box">
-                                    <label>1</label>
-                                    <img src="http://39.108.135.214:8899/imgs/SJ4EgwosX0wTqvyAvhtFGT1w.jpg">
+                                    <label>{{index+1}}</label>
+                                    <img :src="item.img_url">
                                 </div>
                                 <div class="txt-box">
-                                    <a href="/goods/show-98.html">骆驼男装2017秋季新款运动休闲纯色夹克青年宽松长袖针织开衫卫衣</a>
-                                    <span>2017-09-26</span>
+                                    <a href="/goods/show-98.html">{{item.title}}</a>
+                                    <span>{{item.add_time}}</span>
                                 </div>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <div class="img-box">
                                     <label>2</label>
                                     <img src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200314272543.jpg">
@@ -198,7 +198,7 @@
                                     <a href="/goods/show-98.html">三星（SAMSUNG）UA40HU5920JXXZ 40英寸4K超高清</a>
                                     <span>2015-04-20</span>
                                 </div>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
@@ -588,8 +588,31 @@
 </template>
 
 <script>
-export default {
+// 导入axios
+import axios from "axios"
 
+export default {
+    name:"index",
+    data(){
+        return{
+        // 分类数据
+        catelist:[],
+        // 轮播图数据
+        sliderlist:[],
+        // 热卖数据
+        toplist:[]
+        }
+    },
+    // 在页面打开之后发请求渲染的钩子
+    created() {
+        axios.get('http://111.230.232.110:8899/site/goods/gettopdata/goods').then(res=>{
+            console.log(res);
+            // 赋值
+            this.catelist = res.data.message.catelist
+            this.sliderlist = res.data.message.sliderlist
+            this.toplist = res.data.message.toplist
+        })
+    },
 }
 </script>
 
