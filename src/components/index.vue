@@ -112,9 +112,11 @@
               <el-carousel height="431px">
                 <el-carousel-item v-for="(item,index) in sliderlist" :key="index">
                   <!-- <h3>{{ item }}</h3> -->
-                  <a href="" class="silder-a">
+                  <router-link :to="'/detail/'+item.id" class="silder-a">
+                  <!-- <a href="" class="silder-a"> -->
                       <img :src="item.img_url" alt="" class="silder-img">
-                  </a>
+                  <!-- </a> -->
+                  </router-link>
                 </el-carousel-item>
               </el-carousel>
             </div>

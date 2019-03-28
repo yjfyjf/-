@@ -13,7 +13,18 @@
         <div class="wrap-box">
           <div class="left-925">
             <div class="goods-box clearfix">
-              <div class="pic-box"></div>
+              <div class="pic-box">
+                 <el-carousel>
+                    <el-carousel-item v-for="(item,index) in imglist" :key="index">
+                      <!-- <h3>{{ item }}</h3> -->
+                      <!-- <a href="" class="silder-a"> -->
+                      <!-- <router-link :to="'/detail/'+item.id"> -->
+                        <img :src="item.thumb_path" alt="">
+                      <!-- </a> -->
+                      <!-- </router-link> -->
+                    </el-carousel-item>
+                  </el-carousel>  
+              </div>
               <div class="goods-spec">
                 <h1>{{goodsinfo.title}}</h1>
                 <p class="subtitle">{{goodsinfo.sub_title}}</p>
@@ -89,6 +100,7 @@
                           sucmsg=" "
                           data-type="*10-1000"
                           nullmsg="请填写评论内容！"
+                          v-model="comment"
                         ></textarea>
                         <span class="Validform_checktip"></span>
                       </div>
@@ -99,6 +111,7 @@
                           type="submit"
                           value="提交评论"
                           class="submit"
+                          @click="postComments"
                         >
                         <span class="Validform_checktip"></span>
                       </div>
@@ -108,36 +121,31 @@
                     <p
                       style="margin: 5px 0px 15px 69px; line-height: 42px; text-align: center; border: 1px solid rgb(247, 247, 247);"
                     >暂无评论，快来抢沙发吧！</p>
-                    <li>
+                    <li v-for="item in commentList">
                       <div class="avatar-box">
                         <i class="iconfont icon-user-full"></i>
                       </div>
                       <div class="inner-box">
                         <div class="info">
-                          <span>匿名用户</span>
-                          <span>2017/10/23 14:58:59</span>
+                          <span>{{item.user_name}}</span>
+                          <span>{{item.add_time | globalFormatTime('YYYY-MM-DDThh:mm:sss')}}</span>
                         </div>
-                        <p>testtesttest</p>
+                        <p>{{item.content}}</p>
                       </div>
                     </li>
-                    <li>
-                      <div class="avatar-box">
-                        <i class="iconfont icon-user-full"></i>
-                      </div>
-                      <div class="inner-box">
-                        <div class="info">
-                          <span>匿名用户</span>
-                          <span>2017/10/23 14:59:36</span>
-                        </div>
-                        <p>很清晰调动单很清晰调动单</p>
-                      </div>
-                    </li>
+                   
                   </ul>
                   <div class="page-box" style="margin: 5px 0px 0px 62px;">
                     <div id="pagination" class="digg">
-                      <span class="disabled">« 上一页</span>
-                      <span class="current">1</span>
-                      <span class="disabled">下一页 »</span>
+                      <el-pagination
+                        @size-change="handleSizeChange"
+                        @current-change="handleCurrentChange"
+                        :current-page="pageIndex"
+                        :page-sizes="[5, 10, 15, 20]"
+                        :page-size="pageSize"
+                        layout="total, sizes, prev, pager, next, jumper"
+                        :total="400">
+                      </el-pagination>
                     </div>
                   </div>
                 </div>
@@ -195,7 +203,19 @@ export default {
         // 详情页右侧的数据
         hotgoodslist:[],
         // 购买数量
-        num1:1
+        num1:1,
+        // 左侧轮播图
+        imglist:[],
+        // 提交评论
+        comment:'',
+        // 页码
+        pageIndex:1,
+        // 页容量
+        pageSize:10,
+        // 总条数
+        totalcount:0,
+        // 评论的数组
+        commentList:[],
       };
     },
     // 写逻辑的地方
@@ -209,17 +229,65 @@ export default {
       this.goodsinfo = res.data.message.goodsinfo
       // 赋值右侧的数据
       this.hotgoodslist = res.data.message.hotgoodslist
+      // 详情轮播图
+      this.imglist = res.data.message.imglist
       })
     },
+    // 添加购物数量的计算器
     handleChange(){
       console.log('加');
       
-    }
+    },
+    
+    // 提交评论
+    postComments(){
+      // 判断是否为空
+      if (this.comment === "") {
+        // 为空就提示
+        this.$message.error('老铁,写点东西呀')
+      }else{
+        // 不为空就发请求
+        this.$axios.post(`site/validate/comment/post/goods/${this.$route.params.id}`,{commenttxt:'this.comment'}).then(res=>{
+          console.log(res);
+          // 如果评论成功提示用户成功
+          if (res.data.status === 0) {
+            this.$message.success(res.data.message);
+            // 清空输入框
+            this.comment = ""
+            this.pageSize = 10
+            this.pageIndex = 1
+          }
+        })
+      }
+    },
+    getComments(){
+    this.$axios.get(`site/comment/getbypage/goods/${this.$route.params.id}?pageIndex=${this.pageIndex}&pageSize=${this.pageSize}`).then(res=>{
+      console.log(res);
+      this.totalcount = res.data.message.totalcount
+      this.commentList = res.data.message
+      })
+    },
+     // 总页数
+    handleSizeChange(size){
+      console.log(size);
+      this.pageSize = size
+      this.getComments()
+    },
+    // 页码
+    handleCurrentChange(current){
+      console.log(current);
+      this.pageIndex = current
+      this.getComments()
+    },
   },
-  // 这是中间数据的请求
+ 
+  // 这是中间数据的请求 
   created() {
-    this.getDetail()
+    this.getDetail();
+    this.getComments()
   },
+  
+  
   // 用监听请求数据渲染右侧
   watch: {
     $route(value,oldValue){
@@ -232,4 +300,21 @@ export default {
 </script>
 
 <style>
+.pic-box{
+  width: 395px;
+  height: 320px;
+}
+.pic-box .el-carousel{
+  width: 100%;
+  height: 100%;
+}
+.pic-box .el-carousel__container{
+  width: 100%;
+  height: 100%;
+}
+.pic-box .el-carousel__container img{
+  display: block;
+  width: 100%;
+  height: 100%;
+}
 </style>

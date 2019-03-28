@@ -13,6 +13,14 @@ import index from './components/index.vue'
 import cart from './components/cart.vue'
 // 详情页
 import detail from './components/detail.vue'
+// 会员中心
+import usercontainer from './components/usercontainer.vue'
+// 会员中心主页
+import userindex from './components/userindex.vue'
+// 会员中心列表
+import userorder from './components/userorder.vue'
+// 会员中心详情
+import userdetail from './components/userdetail.vue'
 
 // 导入路由
 import VueRouter from 'vue-router'
@@ -70,6 +78,27 @@ let routes = [
   {
     path:'/detail/:id',
     component:detail
+  },
+  {
+    // 会员中心利用路由嵌套
+    path:'/usercontainer',
+    component:usercontainer,
+    // 往下嵌了一层
+    // 3个分页面
+    children:[
+      {
+        path:'userindex',
+        component:userindex
+      },
+      {
+        path:'userorder',
+        component: userorder
+      },
+      {
+        path:'userdetail',
+        component: userdetail
+      }
+    ]
   }
 ]
 
