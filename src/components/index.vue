@@ -166,7 +166,7 @@
                                 </div>
                                 <div class="txt-box">
                                     <a href="/goods/show-98.html">{{item.title}}</a>
-                                    <span>{{item.add_time | fotmeaTime}}</span>
+                                    <span>{{item.add_time | globalFormatTime}}</span>
                                 </div>
                             </li>
            
@@ -223,7 +223,7 @@
 // 导入axios
 // import axios from "axios"
 // 导入 moment
-import moment from "moment"
+// import moment from "moment"
 
 export default {
     name:"index",
@@ -242,11 +242,12 @@ export default {
 
         }
     },
-    filters:{
-        fotmeaTime(){
-            return  moment().format('YYYY-MM-DD')
-        }
-    },
+    // 本地过滤器
+    // filters:{
+    //     fotmeaTime(){
+    //         return  moment().format('YYYY-MM-DD')
+    //     }
+    // },
     // 在页面打开之后发请求渲染的钩子
     created() {
         this.$axios.get('site/goods/gettopdata/goods').then(res=>{

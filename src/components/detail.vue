@@ -40,35 +40,7 @@
                     <dt>购买数量</dt>
                     <dd>
                       <div class="stock-box">
-                        <div class="el-input-number el-input-number--small">
-                          <span role="button" class="el-input-number__decrease is-disabled">
-                            <i class="el-icon-minus"></i>
-                          </span>
-                          <span role="button" class="el-input-number__increase">
-                            <i class="el-icon-plus"></i>
-                          </span>
-                          <div class="el-input el-input--small">
-                            <!---->
-                            <input
-                              autocomplete="off"
-                              size="small"
-                              type="text"
-                              rows="2"
-                              max="60"
-                              min="1"
-                              validateevent="true"
-                              class="el-input__inner"
-                              role="spinbutton"
-                              aria-valuemax="60"
-                              aria-valuemin="1"
-                              aria-valuenow="1"
-                              aria-disabled="false"
-                            >
-                            <!---->
-                            <!---->
-                            <!---->
-                          </div>
-                        </div>
+                        <el-input-number v-model="num1" @change="handleChange" :min="1" :max="10" label="描述文字"></el-input-number>
                       </div>
                       <span class="stock-txt">
                         库存
@@ -193,97 +165,7 @@
                       {{item.title}}
                       <!-- </a> -->
                       </router-link>
-                      <span>{{item.add_time}}</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/91" class>
-                        <img
-                          src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200214471783.jpg"
-                        >
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a
-                        href="#/site/goodsinfo/91"
-                        class
-                      >尼康(Nikon)D3300套机（18-55mm f/3.5-5.6G VRII）（黑色）</a>
-                      <span>2015-04-20</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/92" class>
-                        <img
-                          src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200225107390.jpg"
-                        >
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/92" class>联想（Lenovo） G510AM 15.6英寸笔记本电脑</a>
-                      <span>2015-04-20</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/93" class>
-                        <img
-                          src="http://39.108.135.214:8899/upload/201504/20/201504200341260763.jpg"
-                        >
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/93" class>Apple iMac MF883CH/A 21.5英寸一体机电脑</a>
-                      <span>2015-04-20</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/94" class>
-                        <img
-                          src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200239192345.jpg"
-                        >
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/94" class>金士顿（Kingston） DataTraveler SE9 32GB 金属U盘</a>
-                      <span>2015-04-20</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/97" class>
-                        <img
-                          src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200258403759.jpg"
-                        >
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/97" class>三星（SAMSUNG）UA40HU5920JXXZ 40英寸4K超高清</a>
-                      <span>2015-04-20</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/102" class>
-                        <img src="http://39.108.135.214:8899/imgs/wTgAWDLpQReTQ-ZOMdlAk4vF.jpg">
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/102" class>Hazzys哈吉斯2017新款男士长袖衬衫纯棉修身英伦衬衫显瘦商务衬衣</a>
-                      <span>2017-09-13</span>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="img-box">
-                      <a href="#/site/goodsinfo/103" class>
-                        <img src="http://39.108.135.214:8899/imgs/SJ4EgwosX0wTqvyAvhtFGT1w.jpg">
-                      </a>
-                    </div>
-                    <div class="txt-box">
-                      <a href="#/site/goodsinfo/103" class>骆驼男装2017秋季新款运动休闲纯色夹克青年宽松长袖针织开衫卫衣</a>
-                      <span>2017-09-26</span>
+                      <span>{{item.add_time | globalFormatTime('YYYY年MM年DD日')}}</span>
                     </div>
                   </li>
                 </ul>
@@ -301,20 +183,48 @@
 // import axios from "axios"
 
 export default {
+  // 可写可不写 标记
     name:"detail",
-    data(){
+    // 用return的方式返回数据 所以data是个函数对象
+  data(){
       return{
+        // 详情页的中间数据
         goodsinfo:{},
+        // 索引默认是1
         index:1,
-        hotgoodslist:[]
+        // 详情页右侧的数据
+        hotgoodslist:[],
+        // 购买数量
+        num1:1
       };
     },
-  created() {
-    this.$axios.get(`site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
+    // 写逻辑的地方
+  methods: {
+    // 把常用的axios请求用函数封装  方便多处使用
+    getDetail(){
+      // 调用接口发请求
+      this.$axios.get(`site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
       console.log(res);
+      // 赋值中间的数据
       this.goodsinfo = res.data.message.goodsinfo
+      // 赋值右侧的数据
       this.hotgoodslist = res.data.message.hotgoodslist
-    })
+      })
+    },
+    handleChange(){
+      console.log('加');
+      
+    }
+  },
+  // 这是中间数据的请求
+  created() {
+    this.getDetail()
+  },
+  // 用监听请求数据渲染右侧
+  watch: {
+    $route(value,oldValue){
+      this.getDetail()
+    }
   },
 }
 

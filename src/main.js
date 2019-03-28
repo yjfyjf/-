@@ -26,6 +26,33 @@ Vue.prototype.$axios = axios
 
 // 设置基地址
 axios.defaults.baseURL = 'http://111.230.232.110:8899/'
+// 引入moment
+import moment from "moment"
+// 全局过滤器
+Vue.filter('globalFormatTime',function(value,fmtTemplate){
+  if (fmtTemplate) {
+    return moment(value).format(fmtTemplate)
+  }else{
+    return moment(value).format('YYYY-MM-DD')
+  }
+})
+
+
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+// import App from './App.vue';
+Vue.use(ElementUI);
+
+// // 引入moment
+// import moment from 'moment'
+// // 全局过滤器
+// Vue.filter('globalFormatTime',function(value,fmtTemplate){
+//   if (fmtTemplate) {
+//     return moment(value).format(fmtTemplate)
+//   }else{
+//     return moment(value).format('YYYY-MM-DD')
+//   }
+// })
 // 实例组件
 let routes = [
   {
