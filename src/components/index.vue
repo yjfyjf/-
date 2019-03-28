@@ -221,7 +221,7 @@
 
 <script>
 // 导入axios
-import axios from "axios"
+// import axios from "axios"
 // 导入 moment
 import moment from "moment"
 
@@ -249,14 +249,14 @@ export default {
     },
     // 在页面打开之后发请求渲染的钩子
     created() {
-        axios.get('http://111.230.232.110:8899/site/goods/gettopdata/goods').then(res=>{
+        this.$axios.get('site/goods/gettopdata/goods').then(res=>{
             console.log(res);
             // 赋值
             this.catelist = res.data.message.catelist
             this.sliderlist = res.data.message.sliderlist
             this.toplist = res.data.message.toplist
         })
-        axios.get('http://111.230.232.110:8899/site/goods/getgoodsgroup').then(res=>{
+        this.$axios.get('http://111.230.232.110:8899/site/goods/getgoodsgroup').then(res=>{
             console.log(res);
             this.goodslist = res.data.message
         })

@@ -19,6 +19,13 @@ import VueRouter from 'vue-router'
 // use一下
 Vue.use(VueRouter)
 
+
+// 引入全局axios
+import axios from 'axios'
+Vue.prototype.$axios = axios
+
+// 设置基地址
+axios.defaults.baseURL = 'http://111.230.232.110:8899/'
 // 实例组件
 let routes = [
   {

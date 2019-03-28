@@ -177,17 +177,23 @@
               <div class="sidebar-box">
                 <h4>推荐商品</h4>
                 <ul class="side-img-list">
-                  <li>
+                  <li v-for="item in hotgoodslist">
                     <div class="img-box">
-                      <a href="#/site/goodsinfo/90" class>
+                      <router-link :to="'/detail/'+item.id">
+                      <!-- <a href="#/site/goodsinfo/90" class> -->
                         <img
-                          src="http://39.108.135.214:8899/upload/201504/20/thumb_201504200154277661.jpg"
+                          :src="item.img_url"
                         >
-                      </a>
+                      </router-link>
+                      <!-- </a> -->
                     </div>
                     <div class="txt-box">
-                      <a href="#/site/goodsinfo/90" class>佳能（Canon） EOS 700D 单反套机</a>
-                      <span>2015-04-20</span>
+                      <router-link :to="'/detail/'+item.id">
+                      <!-- <a href="#/site/goodsinfo/90" class> -->
+                      {{item.title}}
+                      <!-- </a> -->
+                      </router-link>
+                      <span>{{item.add_time}}</span>
                     </div>
                   </li>
                   <li>
@@ -292,20 +298,22 @@
 
 <script>
 // 传入axios
-import axios from "axios"
+// import axios from "axios"
 
 export default {
     name:"detail",
     data(){
       return{
         goodsinfo:{},
-        index:1
+        index:1,
+        hotgoodslist:[]
       };
     },
   created() {
-    axios.get(`http://111.230.232.110:8899/site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
+    this.$axios.get(`site/goods/getgoodsinfo/${this.$route.params.id}`).then(res=>{
       console.log(res);
       this.goodsinfo = res.data.message.goodsinfo
+      this.hotgoodslist = res.data.message.hotgoodslist
     })
   },
 }
